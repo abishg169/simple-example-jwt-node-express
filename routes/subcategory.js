@@ -19,21 +19,51 @@ router.route('/add').post((req, res) => {
 
 router.route('/list').get((req, res) => {
     SubCategory.find()
-        .then(subcategories => res.json(subcategories))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
-
-router.route('/list?category=:categoryId').get((req, res) => {
-    SubCategory.find()
         .then(subcategories => {
-            res.json(subcategories)
+            console.log('searching for category id = ', req.query
+            .category);
+            console.log('subcategories = ', subcategories);
+            if (req.query.category) {
+                const list = []
+                subcategories.forEach(data => {
+                    console.log(`data ${data.category} = ${req.query.category}`, data.category == req.query.category)
+                    if (data.category == req.query
+                        .category) {
+                        const obj = {
+                            id: data.id,
+                            name: data.name,
+                            category: data.category,
+                        }
+                        list.push(obj)
+                    }
+                })
+                return res.status(200).json(list);
+            } else {
+                const list = []
+                subcategories.forEach(data => {
+                    const obj = {
+                        id: data.id,
+                        name: data.name,
+                        category: data.category,
+                    }
+                    list.push(obj)
+                })
+                return res.status(200).json(list);
+            }
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/:id').get((req, res) => {
     SubCategory.findById(req.params.id)
-        .then(subcategory => res.json(subcategory))
+        .then(subcategory => {
+            const obj = {
+                id: data.id,
+                name: data.name,
+                category: data.category,
+            }
+            return res.status(200).json(obj)
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 

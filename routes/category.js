@@ -16,13 +16,29 @@ router.route('/add').post((req, res) => {
 
 router.route('/list').get((req, res) => {
     Category.find()
-        .then(categories => res.json(categories))
+        .then(categories => {            
+            const list = []
+            categories.forEach(data => {
+                const obj = {
+                    id: data.id,
+                    name: data.name
+                }
+                list.push(obj)
+            })
+            return res.status(200).json(list);
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/:id').get((req, res) => {
     Category.findById(req.params.id)
-        .then(category => res.json(category))
+        .then(category => {
+            const obj = {
+                id: data.id,
+                name: data.name
+            }
+            return res.status(200).json(obj)
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
